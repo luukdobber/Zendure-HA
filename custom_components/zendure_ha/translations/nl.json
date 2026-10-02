@@ -98,6 +98,9 @@
       },
       "soc_set": {
         "name": "SOC Maximaal"
+      },
+      "p1_gain": {
+        "name": "Regelsterkte"
       }
     },
     "sensor": {
@@ -223,7 +226,7 @@
         "name": "Elektriciteitsniveau (SoC)"
       },
       "global_soc": {
-         "name": "Globale batterij SOC"
+        "name": "Globale batterij SOC"
       },
       "roundtrip_efficiency": {
         "name": "Retourrendement"
@@ -257,7 +260,7 @@
           "2": "Aan",
           "3": "Directe netlevering"
         }
-      },      
+      },
       "output_pack_power": {
         "name": "Batterij Laden"
       },

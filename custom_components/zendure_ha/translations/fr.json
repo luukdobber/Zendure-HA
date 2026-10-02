@@ -102,6 +102,9 @@
       },
       "soc_set": {
         "name": "SOC maximum"
+      },
+      "p1_gain": {
+        "name": "Gain de régulation"
       }
     },
     "sensor": {

@@ -64,6 +64,12 @@ class SmartMode:
     P1_STDDEV_FACTOR = 3.5  # Multiplier for P1 meter stddev calculation
     P1_STDDEV_MIN = 15  # Minimum stddev value for P1 changes (watts)
     P1_MIN_UPDATE = timedelta(milliseconds=400)
+
+    # Percentage of the measured p1 error applied per update. 100% assumes p1 has
+    # caught up with the last correction; lower it when meter or device lag means it has not.
+    P1_GAIN_DEFAULT = 100
+    P1_GAIN_MIN = 10
+
     SETPOINT_STDDEV_FACTOR = 5.0  # Multiplier for power average stddev calculation
     SETPOINT_STDDEV_MIN = 50  # Minimum stddev value for power average (watts)
 

@@ -101,6 +101,9 @@
       },
       "soc_set": {
         "name": "SoC-Zielwert"
+      },
+      "p1_gain": {
+        "name": "Regelverstärkung"
       }
     },
     "sensor": {

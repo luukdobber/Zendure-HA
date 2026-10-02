@@ -107,6 +107,7 @@ class ZendureManager(DataUpdateCoordinator[None], EntityDevice):
         )
         self.operationstate = ZendureSensor(self, "operation_state")
         self.manualpower = ZendureRestoreNumber(self, "manual_power", None, None, "W", "power", 12000, -12000, NumberMode.BOX, True)
+        self.p1gain = ZendureRestoreNumber(self, "p1_gain", None, None, "%", None, 100, SmartMode.P1_GAIN_MIN, NumberMode.BOX, True)
         self.availableKwh = ZendureSensor(self, "available_kwh", None, "kWh", "energy_storage", None, 1)
         self.totalKwh = ZendureSensor(self, "total_kwh", None, "kWh", "energy_storage", "measurement", 2)
         self.power = ZendureSensor(self, "power", None, "W", "power", "measurement", 0)
@@ -487,8 +488,16 @@ class ZendureManager(DataUpdateCoordinator[None], EntityDevice):
         # and p1 >= 0, the result stays >= 0 — the #1151 guarantee holds structurally.
         setpoint -= self.discharge_bypass
 
+        # setpoint - p1 is the output the devices already deliver, so only the p1 term is scaled.
+        gain = self.p1gain.asInt
+        if gain < SmartMode.P1_GAIN_MIN or gain > 100:
+            gain = SmartMode.P1_GAIN_DEFAULT
+            self.p1gain.update_value(gain)
+        if gain < 100:
+            setpoint = int((setpoint - p1) + p1 * gain / 100)
+
         # Update power distribution.
-        _LOGGER.info("P1 ======> p1:%s isFast:%s, setpoint:%sW stored:%sW", p1, isFast, setpoint, self.produced)
+        _LOGGER.info("P1 ======> p1:%s isFast:%s, setpoint:%sW stored:%sW gain:%s%%", p1, isFast, setpoint, self.produced, gain)
         match self.operation:
             case ManagerMode.MATCHING:
                 if setpoint < 0:
